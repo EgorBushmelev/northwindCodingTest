@@ -1,0 +1,121 @@
+@using Bit.CodingTest.ViewModels
+@model OrderEditViewModel
+
+@{
+    ViewData["Title"] = Model.Order == null ? "Create new order" : "Edit order";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div ng-controller="editCtrl" >
+    <form name="orderForm" novalidate ng-submit="submit()">
+        <div class="form-horizontal">
+            <h4>Orders</h4>
+            <hr />
+            <div class="form-group">
+                <label class="control-label col-md-2">Customer</label>
+                <div class="col-md-10">
+                    <select class="form-control" name="customer" ng-options="customer for customer in customers track by customer" ng-model="order.customer"></select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-2">Employee</label>
+                <div class="col-md-10">
+                    <select class="form-control" name="employee" ng-options="employee.text for employee in employees track by employee.id" ng-model="order.employee"></select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label">Freight</label>
+                <div class="col-md-10">
+                    <input type="number" step="any" min="0" class="form-control" name="freight" ng-model="order.freight" />
+                    <span ng-show="orderForm.freight.$invalid" class="text-danger" >Enter correct freight</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label">Order Date</label>
+                <div class="col-md-10">
+                    <input class="form-control" name="orderDate" datetime="dd.MM.yyyy" ng-model="order.orderDate" datetime-model="yyyy-MM-ddTHH:mm:ss" />
+                    <span ng-show="orderForm.orderDate.$invalid" class="text-danger" >Enter correct date</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label">Required Date</label>
+                <div class="col-md-10">
+                    <input class="form-control" name="requiredDate" datetime="dd.MM.yyyy" ng-model="order.requiredDate" datetime-model="yyyy-MM-ddTHH:mm:ss" />
+                    <span ng-show="orderForm.requiredDate.$invalid" class="text-danger" >Enter correct date</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label">Ship Address</label>
+                <div class="col-md-10">
+                    <input class="form-control" name="shipAddress" ng-model="order.shipAddress" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label">Ship City</label>
+                <div class="col-md-10">
+                    <input class="form-control" name="shipCity" ng-model="order.shipCity" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label">Ship Country</label>
+                <div class="col-md-10">
+                    <input class="form-control" name="shipCountry" ng-model="order.shipCountry" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label">Ship Name</label>
+                <div class="col-md-10">
+                    <input class="form-control" name="shipName" ng-model="order.shipName" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label">Ship Postal Code</label>
+                <div class="col-md-10">
+                    <input class="form-control" name="shipPostalCode" ng-model="order.shipPostalCode" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label">Ship Region</label>
+                <div class="col-md-10">
+                    <input class="form-control" name="shipRegion" ng-model="order.shipRegion" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-2">Ship Via</label>
+                <div class="col-md-10">
+                    <select class="form-control" name="shipVia" ng-options="shipViaItem.text for shipViaItem in shipVia track by shipViaItem.id" ng-model="order.shipVia"></select>
+                    <span ng-show="orderForm.shipVia.$invalid" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label">Shipped Date</label>
+                <div class="col-md-10">
+                    <input class="form-control" name="shippedDate" datetime="dd.MM.yyyy" ng-model="order.shippedDate" datetime-model="yyyy-MM-ddTHH:mm:ss" />
+                    <span ng-show="orderForm.shippedDate.$invalid" class="text-danger" >Enter correct date</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Save" class="btn btn-default" ng-disabled="!orderForm.$valid"/>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+<script>
+    angular.module("bctApp")
+        .constant("viewModel", @Json.Serialize(Model))
+        .constant("urls",
+        {
+            save: "@Html.Raw(Url.Action("Edit", "Orders"))/",
+            redirect: "@Html.Raw(Url.Action("Details", "Orders"))/"
+        });
+</script>
+
+<script src="~/js/controllers/orderEditCtrl.js"></script>

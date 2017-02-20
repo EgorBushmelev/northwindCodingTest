@@ -1,0 +1,122 @@
+@using Bit.CodingTest.Entities
+@model Bit.CodingTest.ViewModels.OrderDetailsViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div ng-controller="orderDetailsCtrl" ng-cloak>
+    <h4>Order</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>Customer</dt>
+        <dd>{{order.customer}}</dd>
+        <dt>Employee</dt>
+        <dd>{{order.employee.text}}</dd>
+        <dt>Freight</dt>
+        <dd>{{order.freight}}</dd>
+        <dt>Order Date</dt>
+        <dd>{{order.orderDate | date:'dd.MM.yyyy'}}</dd>
+        <dt>Required Date</dt>
+        <dd>{{order.requiredDate | date:'dd.MM.yyyy'}}</dd>
+        <dt>Ship Address</dt>
+        <dd>{{order.shipAddress}}</dd>
+        <dt>Ship City</dt>
+        <dd>{{order.shipCity}}</dd>
+        <dt>Ship Country</dt>
+        <dd>{{order.shipCountry}}</dd>
+        <dt>Ship Name</dt>
+        <dd>{{order.shipName}}</dd>
+        <dt>Ship Postal Code</dt>
+        <dd>{{order.shipPostalCode}}</dd>
+        <dt>Ship Region</dt>
+        <dd>{{order.shipRegion}}</dd>
+        <dt>Shipped Date</dt>
+        <dd>{{order.shippedDate | date:'dd.MM.yyyy'}}</dd>
+        <dt>Ship via</dt>
+        <dd>{{order.shipVia.text}}</dd>
+    </dl>
+    
+    <table class="table table-striped" ng-cloak>
+        <thead>
+        <tr>
+            <th>Product</th>
+            <th>Unit Price</th>
+            <th>Quantity</th>
+            <th>Discount</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="detail in orderDetails" ng-form name="orderDetailsForm">
+            <td>{{detail.product.text}}</td>
+            <td>{{detail.unitPrice}}</td>
+            <td>{{detail.quantity}}</td>
+            <td>{{detail.discount}}</td>
+            <td>
+                <a ng-click="showForm(detail)"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                <a ng-click="deleteModal(detail)"><i class="fa fa-trash" aria-hidden="true"></i></a>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="5">
+                <div style="text-align: right">
+                    <a ng-click="showForm()"><i class="fa fa-plus" aria-hidden="true" ></i> Add new product</a>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Order.OrderId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
+
+<script src="~/js/controllers/orderDetailsCtrl.js"></script>
+
+<script>
+    angular.module("bctApp")
+        .constant("viewModel", @Json.Serialize(Model))
+</script>
+
+<script type="text/ng-template" id="orderDetailModal.html">
+    <div class="modal-header">
+        <h3>{{isNewDetail ? "Create order detail" : "Edit order detail"}}</h3>
+    </div>
+    <form name="form.orderDetailsForm" ng-submit="submitForm()" novalidate>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>Product</label>
+                <select class="form-control" name="product" ng-options="product.text for product in availableProducts track by product.id" ng-model="detail.product" required ng-disabled="!isNewDetail"></select>
+                <p ng-show="form.orderDetailsForm.product.$invalid && !form.orderDetailsForm.product.$pristine" class="help-block text-danger">Select product</p>
+            </div>
+
+            <div class="form-group">
+                <label>Unit price</label>
+                <input class="form-control" name="unitPrice" type="number" step="any" min="0" ng-model="detail.unitPrice" required />
+                <p ng-show="form.orderDetailsForm.unitPrice.$invalid && !form.orderDetailsForm.unitPrice.$pristine" class="help-block text-danger">Enter correct non-negative number</p>
+            </div>
+
+            <div class="form-group">
+                <label>Quantity</label>
+                <input class="form-control" name="quantity" type="number" min="1" ng-model="detail.quantity" required />
+                <p ng-show="form.orderDetailsForm.quantity.$invalid && !form.orderDetailsForm.quantity.$pristine" class="help-block text-danger">Enter correct positive number</p>
+            </div>
+
+            <div class="form-group">
+                <label>Discount</label>
+                <input class="form-control" name="discount" type="number" step="any" min="0" max="1" ng-model="detail.discount" required />
+                <p ng-show="form.orderDetailsForm.discount.$invalid && !form.orderDetailsForm.discount.$pristine" class="help-block text-danger">Enter number between 0 and 1</p>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary" ng-disabled="form.orderDetailsForm.$invalid">OK</button>
+            <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+        </div>
+    </form>
+</script>
+
+<script type="j"></script>

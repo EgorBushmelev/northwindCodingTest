@@ -1,0 +1,71 @@
+@model IEnumerable<Bit.CodingTest.Dtos.OrderDto>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<div ng-controller="ordersListCtrl" ng-cloak>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Freight</th>
+            <th>Order Date</th>
+            <th>Required Date</th>
+            <th>Ship Address</th>
+            <th>Ship City</th>
+            <th>Ship Country</th>
+            <th>Ship Name</th>
+            <th>Ship Postal Code</th>
+            <th>Ship Region</th>
+            <th>Shipped Date</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="order in filteredOrders">
+            <td>{{order.freight}}</td>
+            <td>{{order.orderDate | date:'dd.MM.yyyy'}}</td>
+            <td>{{order.requiredDate | date:'dd.MM.yyyy'}}</td>
+            <td>{{order.shipAddress}}</td>
+            <td>{{order.shipCity}}</td>
+            <td>{{order.shipCountry}}</td>
+            <td>{{order.shipName}}</td>
+            <td>{{order.shipPostalCode}}</td>
+            <td>{{order.shipRegion}}</td>
+            <td>{{order.shippedDate | date:'dd.MM.yyyy'}}</td>
+            <td>
+                <a href="{{urls.editOrder + order.orderId}}"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                <a href="{{urls.orderDetails + order.orderId}}"><i class="fa fa-info" aria-hidden="true"></i></a>
+                <a ng-click="deleteModal(order)"><i class="fa fa-trash" aria-hidden="true"></i></a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    
+    <div class="text-center">
+        <ul uib-pagination
+            ng-model="currentPage"
+            total-items="orders.length"
+            max-size="maxSize"
+            boundary-links="true">
+        </ul>
+    </div>
+</div>
+
+<script>
+    angular.module("bctApp")
+        .constant("viewModel", @Json.Serialize(Model))
+        .constant("urls",
+        {
+            editOrder: "@Html.Raw(Url.Action("Edit", "Orders"))/",
+            orderDetails: "@Html.Raw(Url.Action("Details", "Orders"))/",
+            deleteOrder: "@Html.Raw(Url.Action("Delete", "Orders"))/",
+        })
+</script>
+
+<script src="~/js/controllers/ordersListCtrl.js"></script>
