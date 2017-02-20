@@ -80,6 +80,11 @@
 <script>
     angular.module("bctApp")
         .constant("viewModel", @Json.Serialize(Model))
+        .constant("urls",
+        {
+            editOrderDetail: "@Html.Raw(Url.Action("Edit", "OrderDetails"))/",
+            deleteOrderDetail: "@Html.Raw(Url.Action("Delete", "OrderDetails"))/",
+        })
 </script>
 
 <script type="text/ng-template" id="orderDetailModal.html">
@@ -118,5 +123,3 @@
         </div>
     </form>
 </script>
-
-<script type="j"></script>

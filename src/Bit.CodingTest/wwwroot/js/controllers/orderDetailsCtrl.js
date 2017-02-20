@@ -1,6 +1,6 @@
 ﻿(function() {
     angular.module("bctApp")
-        .controller("orderDetailsCtrl", ["$scope", "$uibModal", "$http", "sweetAlert", "viewModel", function($scope, $uibModal, $http, sweetAlert, viewModel) {
+        .controller("orderDetailsCtrl", ["$scope", "$uibModal", "$http", "sweetAlert", "viewModel", "urls", function($scope, $uibModal, $http, sweetAlert, viewModel, urls) {
             $scope.products = viewModel.products;
             $scope.orderDetails = viewModel.order.orderDetails;
             $scope.order = viewModel.order;
@@ -15,7 +15,7 @@
                     cancelButtonColor: "#d33",
                     confirmButtonText: "Delete"
                 }).then(function() {
-                    $http.post("/OrderDetails/Delete", detail).then(function() {
+                    $http.post(urls.deleteOrderDetail, detail).then(function() {
                         location.reload();
                     });
                 });
@@ -36,7 +36,10 @@
                         products: function() {
                             return $scope.products;
                         },
-                        detail: detail
+                        detail: detail,
+                        urls: function() {
+                            return urls;
+                        }
                     }
                 });
 
@@ -46,7 +49,7 @@
             };
         }]);
 
-    var OrderDetailsModalInstanceCtrl = function($scope, $http, $uibModalInstance, orderId, orderDetails, products, detail) {
+    var OrderDetailsModalInstanceCtrl = function($scope, $http, $uibModalInstance, orderId, orderDetails, products, detail, urls) {
         if (detail === undefined) {
             $scope.isNewDetail = true;
             $scope.detail = {
@@ -64,7 +67,7 @@
 
         $scope.submitForm = function() {
             if ($scope.form.orderDetailsForm.$valid) {
-                $http.post("/OrderDetails/Edit", $scope.detail).then(function() {
+                $http.post(urls.editOrderDetail, $scope.detail).then(function() {
                     $uibModalInstance.close("closed");
                 });
             }
